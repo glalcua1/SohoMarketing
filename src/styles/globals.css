@@ -259,6 +259,31 @@ body {
   background-clip: text;
 }
 
+/* Mobile navigation improvements */
+@media (max-width: 1023px) {
+  /* Ensure navigation header is always visible on mobile */
+  header[data-testid="main-navigation"] {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Improve mobile menu button visibility */
+  [data-testid="mobile-menu-toggle"] {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Ensure logo is visible on all backgrounds */
+  [alt="RateGain Soho"] {
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  }
+}
+
 .text-gradient-success {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   -webkit-background-clip: text;

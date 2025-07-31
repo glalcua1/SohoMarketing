@@ -170,8 +170,8 @@ const Navigation: React.FC<NavigationProps> = ({
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
           shouldShowBackground 
-            ? "glass-card border-b border-white/10" 
-            : "bg-transparent",
+            ? "bg-slate-900/95 backdrop-blur-xl border-b border-white/20 shadow-lg" 
+            : "bg-slate-900/80 backdrop-blur-sm shadow-md",
           className
         )}
         data-testid="main-navigation"
@@ -185,11 +185,11 @@ const Navigation: React.FC<NavigationProps> = ({
                 <img 
                   src="/images/logos/rategain-soho-logo-white.svg"
                   alt="RateGain Soho"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain drop-shadow-lg"
                 />
               </div>
               <div className="hidden sm:block">
-                <span className="text-xl font-display font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <span className="text-xl font-display font-bold text-white drop-shadow-lg">
                   RateGain Soho
                 </span>
               </div>
@@ -249,17 +249,18 @@ const Navigation: React.FC<NavigationProps> = ({
             <button
               onClick={toggleMobileMenu}
               className={cn(
-                "lg:hidden p-2 rounded-lg transition-all duration-300",
-                "glass-card text-white hover:bg-white/10",
-                "focus:outline-none focus:ring-2 focus:ring-blue-400"
+                "lg:hidden p-3 rounded-lg transition-all duration-300",
+                "bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/20",
+                "focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2",
+                "shadow-lg drop-shadow-lg"
               )}
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
               data-testid="mobile-menu-toggle"
             >
               {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6 drop-shadow-sm" />
               ) : (
-                <Menu className="w-6 h-6" />
+                <Menu className="w-6 h-6 drop-shadow-sm" />
               )}
             </button>
           </div>
@@ -274,13 +275,13 @@ const Navigation: React.FC<NavigationProps> = ({
         >
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           
           {/* Menu Panel */}
-          <div className="absolute top-20 right-0 left-0 mx-6">
-            <nav className="glass-card rounded-2xl p-6 space-y-4">
+          <div className="absolute top-20 right-0 left-0 mx-4">
+            <nav className="bg-slate-900/95 backdrop-blur-xl border border-white/20 rounded-2xl p-6 space-y-4 shadow-2xl">
               
               {/* Mobile Navigation Links */}
               {navigationLinks.map((link, index) => (
