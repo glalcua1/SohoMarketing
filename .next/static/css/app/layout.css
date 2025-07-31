@@ -1090,6 +1090,9 @@ select {
 .min-h-screen {
   min-height: 100vh;
 }
+.min-h-\[350px\] {
+  min-height: 350px;
+}
 .w-0 {
   width: 0px;
 }
@@ -1188,6 +1191,12 @@ select {
 }
 .max-w-xl {
   max-width: 36rem;
+}
+.max-w-7xl {
+  max-width: 80rem;
+}
+.max-w-6xl {
+  max-width: 72rem;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -2178,6 +2187,10 @@ select {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
 .pb-3 {
   padding-bottom: 0.75rem;
 }
@@ -2195,6 +2208,9 @@ select {
 }
 .pt-6 {
   padding-top: 1.5rem;
+}
+.pl-6 {
+  padding-left: 1.5rem;
 }
 .text-left {
   text-align: left;
@@ -3109,6 +3125,10 @@ video[data-testid="hero-video-background"] {
     border-color: rgb(255 255 255 / 0.4);
   }
 
+  .hover\:border-red-300\/70:hover {
+    border-color: rgb(252 165 165 / 0.7);
+  }
+
   .hover\:bg-accent-600:hover {
     --tw-bg-opacity: 1;
     background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
@@ -3450,6 +3470,10 @@ video[data-testid="hero-video-background"] {
     gap: 2rem;
   }
 
+  .lg\:gap-10 {
+    gap: 2.5rem;
+  }
+
   .lg\:p-10 {
     padding: 2.5rem;
   }
@@ -3500,6 +3524,11 @@ video[data-testid="hero-video-background"] {
 
   .lg\:text-xl {
     font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .lg\:text-lg {
+    font-size: 1.125rem;
     line-height: 1.75rem;
   }
 }

@@ -136,7 +136,7 @@ const PainPointCard: React.FC<PainPointCardProps> = ({ painPoint, index }) => {
           {painPoint.stats && (
             <div className="flex justify-end mb-4">
               <div className="text-right">
-                <div className="text-3xl font-display font-bold text-red-600 leading-none">
+                <div className="text-3xl lg:text-4xl font-display font-bold text-red-600 leading-none">
                   {painPoint.stats.value}
                 </div>
                 <div className="text-xs text-gray-500 font-medium mt-1">
@@ -146,7 +146,7 @@ const PainPointCard: React.FC<PainPointCardProps> = ({ painPoint, index }) => {
             </div>
           )}
           
-          {/* Title - Ogilvy Style */}
+          {/* Title - Enhanced Style */}
           <h3 className="text-xl lg:text-2xl font-display font-bold text-gray-900 mb-3 
                          leading-tight group-hover:text-red-700 transition-colors duration-300">
             {painPoint.title}
@@ -158,9 +158,9 @@ const PainPointCard: React.FC<PainPointCardProps> = ({ painPoint, index }) => {
           </p>
         </div>
 
-        {/* Reality Check - Minimal Design */}
+        {/* Reality Check - Enhanced Design */}
         <div className="relative z-10 mb-6">
-          <div className="pl-4">
+          <div className="pl-4 border-l-4 border-red-200">
             <div className="text-xs font-mono font-semibold text-red-600 mb-2 uppercase tracking-wider">
               Reality Check
             </div>
@@ -170,12 +170,13 @@ const PainPointCard: React.FC<PainPointCardProps> = ({ painPoint, index }) => {
           </div>
         </div>
 
-        {/* Urgency Indicator - Ogilvy Scarcity Principle */}
+        {/* Urgency Indicator - Enhanced Scarcity Principle */}
         {painPoint.urgency && (
           <div className="relative z-10">
             <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r 
-                            from-red-500/10 to-orange-500/10 rounded-xl border border-red-200/50">
-              <Clock className="w-4 h-4 text-red-600" />
+                            from-red-500/10 to-orange-500/10 rounded-xl border border-red-200/50
+                            hover:border-red-300/70 transition-all duration-300">
+              <Clock className="w-4 h-4 text-red-600 flex-shrink-0" />
               <p className="text-sm font-semibold text-red-700">
                 {painPoint.urgency}
               </p>
@@ -215,13 +216,6 @@ const ProblemSection: React.FC<ProblemSectionProps> = ({ className }) => {
     duration: 0.8,
     transform: { opacity: 1, y: 0 }
   }, 0.2);
-
-  // Animation for the transition badge
-  const badgeAnimation = useScrollAnimation({
-    duration: 0.8,
-    delay: 0.6,
-    transform: { opacity: 1, scale: 1 }
-  });
 
   return (
     <section
@@ -267,7 +261,7 @@ const ProblemSection: React.FC<ProblemSectionProps> = ({ className }) => {
         {/* Pain Points Grid - Enhanced Layout */}
         <div
           ref={gridAnimation.ref as any}
-          className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 mb-20"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-20"
           data-testid="pain-points-grid"
         >
           {painPoints.map((painPoint, index) => (
@@ -277,39 +271,6 @@ const ProblemSection: React.FC<ProblemSectionProps> = ({ className }) => {
               index={index}
             />
           ))}
-        </div>
-
-        {/* Transition to Solution */}
-        <div className="text-center">
-          <div
-            ref={badgeAnimation.ref as any}
-            className="inline-flex items-center gap-3 px-8 py-4 
-                       bg-gradient-to-r from-green-500 to-emerald-500 
-                       rounded-full text-white font-bold text-lg shadow-lg
-                       hover:from-green-600 hover:to-emerald-600 
-                       transition-all duration-300 cursor-pointer
-                       transform hover:scale-105"
-            data-testid="easy-mode-badge"
-            onClick={() => {
-              trackEvent({
-                name: 'easy_mode_click',
-                category: 'user_interaction',
-                properties: {
-                  section: 'problem_to_solution',
-                  action: 'transition_click'
-                }
-              });
-            }}
-          >
-            <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-              <span className="text-sm">✓</span>
-            </div>
-            <span>Easy Mode</span>
-          </div>
-          
-          <p className="mt-4 text-gray-600 text-lg">
-            There&apos;s a better way. Let us show you how...
-          </p>
         </div>
       </div>
     </section>

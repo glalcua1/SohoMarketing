@@ -21,7 +21,6 @@ import {
   CheckCircle, 
   ChevronLeft,
   ChevronRight,
-  Users,
   MapPin,
   Award,
   Hotel,
@@ -161,8 +160,6 @@ const testimonials: Testimonial[] = [
 interface TestimonialsSectionProps {
   /** Custom class name */
   className?: string;
-  /** Callback for CTA interactions */
-  onCTAClick?: () => void;
 }
 
 /**
@@ -176,9 +173,9 @@ interface TestimonialsSectionProps {
  * - Create emotional connection through stories
  * 
  * @example
- * <TestimonialsSection onCTAClick={() => scrollToSection('#pricing')} />
+ * <TestimonialsSection />
  */
-const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ className, onCTAClick }) => {
+const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ className }) => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -420,37 +417,7 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ className, on
             </button>
           </div>
         </div>
-
-        {/* Bottom CTA */}
-        <div className="text-center">
-          <div className="glass-card p-6 rounded-2xl max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <Users className="w-6 h-6 text-blue-600" />
-              <span className="text-blue-800 font-semibold">
-                Join 350+ Successful Hotels
-              </span>
-            </div>
-            
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to See Similar Results for Your Property?
-            </h3>
-            
-            <p className="text-gray-600 mb-4 max-w-xl mx-auto">
-              Start your free trial and see why hotels consistently choose us over generic databases
-            </p>
-            
-            <button
-              onClick={onCTAClick}
-              className="btn-professional bg-gradient-to-r from-blue-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-professional-xl transition-all duration-300"
-              data-analytics="testimonials-section-cta"
-            >
-              Start Free Trial - Join the Success Stories
-            </button>
-          </div>
-        </div>
       </div>
-
-
     </section>
   );
 };

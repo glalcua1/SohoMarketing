@@ -18,9 +18,7 @@ import {
   Brain, 
   FileText, 
   BarChart3, 
-  CheckCircle, 
-  ArrowRight, 
-  TrendingUp,
+  CheckCircle,
   type LucideIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -144,8 +142,6 @@ const mainFeatures: Feature[] = [
 interface FeaturesSectionProps {
   /** Custom class name */
   className?: string;
-  /** Callback for CTA interactions */
-  onCTAClick?: () => void;
 }
 
 /**
@@ -159,9 +155,9 @@ interface FeaturesSectionProps {
  * - Focus on outcomes, not just features
  * 
  * @example
- * <FeaturesSection onCTAClick={() => scrollToSection('#pricing')} />
+ * <FeaturesSection />
  */
-const FeaturesSection: React.FC<FeaturesSectionProps> = ({ className, onCTAClick }) => {
+const FeaturesSection: React.FC<FeaturesSectionProps> = ({ className }) => {
   const [activeFeature, setActiveFeature] = useState<string>(mainFeatures[0]?.id || 'ai-matching');
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -328,47 +324,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ className, onCTAClick
             );
           })}
         </div>
-
-        {/* Bottom CTA */}
-        <div className="text-center">
-          <div className="glass-card p-8 rounded-2xl max-w-3xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <TrendingUp className="w-6 h-6 text-emerald-600" />
-              <span className="text-emerald-800 font-semibold">
-                Ready to Experience These Features?
-              </span>
-            </div>
-            
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              See How AI Creator Matching Works for Your Hotel
-            </h3>
-            
-            <p className="text-gray-600 mb-6 max-w-xl mx-auto">
-              Get a personalized demo showing exactly how our features will work with your property type and target audience.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={onCTAClick}
-                className="btn-professional bg-gradient-to-r from-emerald-600 to-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-professional-xl transition-all duration-300 group"
-                data-analytics="features-section-cta-primary"
-              >
-                Start Free Trial
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-              </button>
-              
-              <button
-                className="glass-card text-gray-700 px-8 py-4 rounded-xl font-semibold hover:bg-white/60 transition-all duration-300"
-                data-analytics="features-section-cta-demo"
-              >
-                Watch Demo
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-
-
     </section>
   );
 };

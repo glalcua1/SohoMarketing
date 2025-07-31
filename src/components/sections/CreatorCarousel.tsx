@@ -444,26 +444,28 @@ const CreatorCarousel: React.FC<CreatorCarouselProps> = ({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/30" />
       </div>
 
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+      <div className="relative z-10">
         
-        {/* Header */}
-        <div ref={sectionAnimation.ref as any} className="text-center mb-20">
-          <h2 className="text-4xl lg:text-6xl font-display font-bold text-white mb-6">
-            Real Creators.
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Real Results.
-            </span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            See how leading hospitality creators are already using our platform 
-            to create <span className="font-semibold text-white">authentic, engaging content</span> that drives bookings.
-          </p>
+        {/* Header - Centered */}
+        <div className="container mx-auto px-6 lg:px-8">
+          <div ref={sectionAnimation.ref as any} className="text-center mb-20">
+            <h2 className="text-4xl lg:text-6xl font-display font-bold text-white mb-6">
+              Real Creators.
+              <br />
+              <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Real Results.
+              </span>
+            </h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              See how leading hospitality creators are already using our platform 
+              to create <span className="font-semibold text-white">authentic, engaging content</span> that drives bookings.
+            </p>
+          </div>
         </div>
 
-        {/* Enhanced Cinematic Stage - Continuous Flow */}
+        {/* Enhanced Cinematic Stage - Full Width Continuous Flow */}
         <div 
-          className="relative min-h-[500px] mb-16 overflow-hidden" 
+          className="relative min-h-[350px] mb-16 overflow-hidden" 
           style={{ perspective: '1500px' }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -484,7 +486,7 @@ const CreatorCarousel: React.FC<CreatorCarouselProps> = ({
           {/* Continuous Flow Container */}
           <div
             ref={carouselRef}
-            className="flex items-center gap-8 py-16"
+            className="flex items-center gap-8 py-8"
             style={{ 
               perspective: '1500px',
               transformStyle: 'preserve-3d',
@@ -522,34 +524,36 @@ const CreatorCarousel: React.FC<CreatorCarouselProps> = ({
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-white/3 via-blue-500/2 to-transparent blur-2xl opacity-50 rounded-full" />
         </div>
 
-        {/* Flowing Animation Indicator */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-3 px-6 py-3 rounded-full glass-card">
-            <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-            <span className="text-white/70 text-sm font-medium">Live Creator Showcase</span>
-            <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        {/* Flowing Animation Indicator - Centered */}
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="flex justify-center mb-8">
+            <div className="flex items-center gap-3 px-6 py-3 rounded-full glass-card">
+              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+              <span className="text-white/70 text-sm font-medium">Live Creator Showcase</span>
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+            </div>
           </div>
-        </div>
 
-        {/* Stats - Cinematic Style */}
-        <div className="grid md:grid-cols-3 gap-8 mt-8">
-          <div className="text-center group">
-            <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2 group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300">
-              5.2M+
+          {/* Stats - Cinematic Style */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <div className="text-center group">
+              <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2 group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300">
+                5.2M+
+              </div>
+              <div className="text-gray-400 font-medium">Total Views Generated</div>
             </div>
-            <div className="text-gray-400 font-medium">Total Views Generated</div>
-          </div>
-          <div className="text-center group">
-            <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2 group-hover:from-blue-400 group-hover:to-purple-400 transition-all duration-300">
-              340%
+            <div className="text-center group">
+              <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2 group-hover:from-blue-400 group-hover:to-purple-400 transition-all duration-300">
+                340%
+              </div>
+              <div className="text-gray-400 font-medium">Average ROI Increase</div>
             </div>
-            <div className="text-gray-400 font-medium">Average ROI Increase</div>
-          </div>
-          <div className="text-center group">
-            <div className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:from-purple-400 group-hover:to-blue-400 transition-all duration-300">
-              2,800+
+            <div className="text-center group">
+              <div className="text-4xl font-bold bg-gradient-to-r from-pink-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:from-purple-400 group-hover:to-blue-400 transition-all duration-300">
+                2,800+
+              </div>
+              <div className="text-gray-400 font-medium">Active Creator Partnerships</div>
             </div>
-            <div className="text-gray-400 font-medium">Active Creator Partnerships</div>
           </div>
         </div>
       </div>

@@ -14,9 +14,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Building2, Search, Bot, ArrowRight, Play, Pause } from 'lucide-react';
+import { Building2, Search, Bot, Play, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
+
 import { useScrollAnimation } from '@/components/animations/useGSAP';
 import { trackEvent, formatNumber } from '@/lib/utils';
 
@@ -227,8 +227,6 @@ const solutionSteps: SolutionStep[] = [
 interface SolutionSectionProps {
   /** Custom class name */
   className?: string;
-  /** Callback for CTA button click */
-  onCTAClick?: () => void;
 }
 
 /**
@@ -425,27 +423,6 @@ const SolutionSection: React.FC<SolutionSectionProps> = ({
     transform: { opacity: 1, x: 0 }
   });
 
-  const ctaAnimation = useScrollAnimation({
-    duration: 0.8,
-    delay: 0.6,
-    transform: { opacity: 1, y: 0 }
-  });
-
-  const handleCTAClick = () => {
-    trackEvent({
-      name: 'solution_cta_click',
-      category: 'conversion',
-      properties: {
-        section: 'solution_demo',
-        active_step: activeStep
-      }
-    });
-
-    if (onCTAClick) {
-      onCTAClick();
-    }
-  };
-
   return (
     <section
       className={cn(
@@ -640,45 +617,7 @@ const SolutionSection: React.FC<SolutionSectionProps> = ({
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div
-          ref={ctaAnimation.ref as any}
-          className="text-center glass-card p-8 lg:p-12 rounded-2xl border border-white/20"
-          data-testid="solution-cta"
-        >
-          <h3 className="text-2xl lg:text-3xl font-bold text-white mb-4">
-            Ready to Transform Your Marketing?
-          </h3>
-          <p className="text-lg lg:text-xl text-gray-300 mb-6 lg:mb-8 max-w-2xl mx-auto">
-            Join 350+ hotels already using AI to find perfect creators
-          </p>
-          
-          <Button
-            variant="primary"
-            size="xl"
-            onClick={handleCTAClick}
-            rightIcon={<ArrowRight className="w-6 h-6" />}
-            data-analytics="solution-demo-cta"
-            className="btn-professional shadow-professional-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-xl px-12 py-6"
-          >
-            Start Your First Campaign Free
-          </Button>
-          
-          <div className="mt-8 flex flex-wrap justify-center items-center gap-6 lg:gap-8 text-gray-300">
-            <span className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-emerald-400 rounded-full"></div>
-              <span className="font-medium text-sm lg:text-base">No Setup Fees</span>
-            </span>
-            <span className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-400 rounded-full"></div>
-              <span className="font-medium text-sm lg:text-base">Cancel Anytime</span>
-            </span>
-            <span className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-yellow-400 rounded-full"></div>
-              <span className="font-bold text-yellow-300 text-sm lg:text-base">70% Off Launch Pricing</span>
-            </span>
-          </div>
-        </div>
+
       </div>
     </section>
   );
