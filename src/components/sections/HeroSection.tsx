@@ -111,6 +111,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
   const [currentCreatorIndex, setCurrentCreatorIndex] = useState(0);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [connectionSpeed, setConnectionSpeed] = useState<'fast' | 'slow' | 'unknown'>('unknown');
+  const [isMobile, setIsMobile] = useState(false);
+  const [userPreference, setUserPreference] = useState<'video' | 'static'>('video');
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // Parallax background effect
@@ -130,6 +133,86 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
 
 
 
+  // Mobile and connection detection
+  useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const mobileKeywords = ['mobile', 'iphone', 'ipad', 'android', 'blackberry', 'windows phone'];
+      const isMobileDevice = mobileKeywords.some(keyword => userAgent.includes(keyword)) || 
+                           window.innerWidth < 768 || 
+                           'ontouchstart' in window;
+      setIsMobile(isMobileDevice);
+      
+      // On mobile devices, prefer static background to save data and improve performance
+      if (isMobileDevice) {
+        setUserPreference('static');
+        console.log('📱 Mobile device detected - using static background for performance');
+      }
+    };
+
+    // Detect connection speed using Network Information API
+    const detectConnectionSpeed = () => {
+      try {
+        // @ts-ignore - NetworkInformation is not in TypeScript types yet
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        
+        if (connection) {
+          // Connection types: 'slow-2g', '2g', '3g', '4g'
+          const slowConnections = ['slow-2g', '2g', '3g'];
+          const isSlowConnection = slowConnections.includes(connection.effectiveType) || 
+                                 connection.downlink < 2; // Less than 2 Mbps
+          
+          setConnectionSpeed(isSlowConnection ? 'slow' : 'fast');
+          console.log(`📶 Connection detected: ${connection.effectiveType}, Speed: ${isSlowConnection ? 'slow' : 'fast'}`);
+          
+          // Auto-disable video on slow connections for better UX
+          if (isSlowConnection) {
+            setUserPreference('static');
+            console.log('🐌 Slow connection detected - using static background');
+          }
+        } else {
+          // Fallback: measure download speed with a small image
+          const startTime = performance.now();
+          const img = new Image();
+          img.onload = () => {
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            const speed = duration < 300 ? 'fast' : 'slow'; // More conservative threshold for video loading
+            setConnectionSpeed(speed);
+            console.log(`📶 Connection speed test: ${Math.round(duration)}ms - ${speed}`);
+            
+            // Use static background on slow fallback test
+            if (speed === 'slow') {
+              setUserPreference('static');
+              console.log('🐌 Slow connection via speed test - using static background');
+            }
+          };
+          img.onerror = () => setConnectionSpeed('slow');
+          img.src = '/favicon.ico?' + Math.random(); // Cache-busting
+        }
+      } catch (error) {
+        console.log('📶 Connection detection failed, assuming fast connection');
+        setConnectionSpeed('fast');
+      }
+    };
+
+    checkMobile();
+    detectConnectionSpeed();
+
+    // Listen for window resize to re-check mobile and connection
+    const handleResize = () => {
+      checkMobile();
+      // Re-detect connection on significant viewport changes (e.g., device rotation)
+      if (Math.abs(window.innerWidth - window.innerHeight) > 200) {
+        detectConnectionSpeed();
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Creator carousel auto-rotation
   useEffect(() => {
     const interval = setInterval(() => {
@@ -144,11 +227,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
   // Professional video loading with robust error handling
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || userPreference === 'static') return;
+
+    // Skip video loading on slow connections or mobile unless explicitly requested
+    if ((connectionSpeed === 'slow' || isMobile) && userPreference !== 'video') {
+      console.log('📶 Skipping video load due to slow connection or mobile device');
+      setVideoError(false);
+      setVideoLoaded(false);
+      return;
+    }
 
     let retryCount = 0;
-    const maxRetries = 3;
-    const retryDelay = 2000; // 2 seconds
+    const maxRetries = 2; // Reduced retries for faster fallback
+    const retryDelay = 1500; // Faster retry
 
     const attemptVideoLoad = async () => {
       try {
@@ -160,11 +251,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
         // Load the video
         video.load();
         
-        // Wait for the video to be ready to play
+        // Wait for the video to be ready to play (shorter timeout for better UX)
         await new Promise((resolve, reject) => {
+          const timeout = connectionSpeed === 'slow' ? 5000 : 8000; // Shorter timeout for slow connections
           const timeoutId = setTimeout(() => {
-            reject(new Error('Video load timeout after 10 seconds'));
-          }, 10000);
+            reject(new Error(`Video load timeout after ${timeout/1000} seconds`));
+          }, timeout);
 
           const handleCanPlay = () => {
             clearTimeout(timeoutId);
@@ -201,26 +293,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
           retryCount++;
           setTimeout(attemptVideoLoad, retryDelay);
         } else {
-          console.log('❌ Video loading failed after all retries, using fallback');
+          console.log('❌ Video loading failed after all retries, gracefully falling back to static background');
           setVideoError(true);
           setVideoLoaded(false);
-          
-          // Set up user interaction fallback
-          const enableVideoOnInteraction = async () => {
-            try {
-              await video.play();
-              console.log('✅ Video enabled after user interaction');
-              setVideoLoaded(true);
-              setVideoError(false);
-              document.removeEventListener('click', enableVideoOnInteraction);
-              document.removeEventListener('touchstart', enableVideoOnInteraction);
-            } catch (e) {
-              console.log('❌ Video failed even after user interaction');
-            }
-          };
-          
-          document.addEventListener('click', enableVideoOnInteraction, { once: true });
-          document.addEventListener('touchstart', enableVideoOnInteraction, { once: true });
+          setUserPreference('static'); // Automatically switch to static background
         }
       }
     };
@@ -235,7 +311,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
         video.currentTime = 0;
       }
     };
-  }, []);
+  }, [userPreference, connectionSpeed, isMobile]);
+
+
 
   /**
    * Handle primary CTA click with analytics
@@ -299,9 +377,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
       }
     }
     
-    console.log('📹 Video error occurred:', errorMessage);
+    console.log('📹 Video error occurred, gracefully falling back to static background:', errorMessage);
     setVideoError(true);
     setVideoLoaded(false);
+    setUserPreference('static'); // Automatically switch to static background
   };
 
   const currentCreator = featuredCreators[currentCreatorIndex];
@@ -315,105 +394,93 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
       )}
       data-testid="hero-section"
     >
-      {/* Video Background */}
-      <div className="absolute inset-0 z-0" style={{ zIndex: 0 }}>
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          controls={false}
-          disablePictureInPicture
-          disableRemotePlayback
-          webkit-playsinline="true"
-          x5-playsinline="true"
-          className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
-            videoLoaded && !videoError ? "opacity-100" : "opacity-0"
-          )}
-          style={{ 
-            filter: 'brightness(0.6) contrast(1.1) saturate(1.1)',
-            transform: 'translateZ(0)', // Hardware acceleration
-            backfaceVisibility: 'hidden'
-          }}
-          data-testid="hero-video-background"
-          onLoadedData={() => console.log('📊 Video data loaded')}
-          onError={handleVideoError}
-          onCanPlay={() => console.log('🎬 Video can play')}
-          onPlay={() => console.log('▶️ Video playing')}
-          onPause={() => console.log('⏸️ Video paused')}
-          onStalled={() => console.log('⏹️ Video stalled')}
-          onWaiting={() => console.log('⏳ Video waiting')}
-          onTimeUpdate={() => {
-            // Ensure video keeps playing if it gets stuck
-            const video = videoRef.current;
-            if (video && video.paused && !videoError) {
-              video.play().catch(() => {
-                // Silent fail - user interaction needed
-              });
-            }
-          }}
-        >
-          {/* Optimized source order - MP4 first as it's more widely supported */}
-          <source src="/0_Abstract_Background_3840x2160.mp4" type="video/mp4" />
-          <source src="/0_Abstract_Background_3840x2160.mov" type="video/quicktime" />
-          Your browser does not support the video tag.
-        </video>
+      {/* Video Background - Only render when user wants video */}
+      {userPreference === 'video' && (
+        <div className="absolute inset-0 z-0" style={{ zIndex: 0 }}>
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload={connectionSpeed === 'fast' && !isMobile ? "metadata" : "none"}
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            webkit-playsinline="true"
+            x5-playsinline="true"
+            className={cn(
+              "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000",
+              videoLoaded && !videoError ? "opacity-100" : "opacity-0"
+            )}
+            style={{ 
+              filter: 'brightness(0.6) contrast(1.1) saturate(1.1)',
+              transform: 'translateZ(0)', // Hardware acceleration
+              backfaceVisibility: 'hidden'
+            }}
+            data-testid="hero-video-background"
+            onLoadedData={() => console.log('📊 Video data loaded')}
+            onError={handleVideoError}
+            onCanPlay={() => console.log('🎬 Video can play')}
+            onPlay={() => console.log('▶️ Video playing')}
+            onPause={() => console.log('⏸️ Video paused')}
+            onStalled={() => console.log('⏹️ Video stalled')}
+            onWaiting={() => console.log('⏳ Video waiting')}
+            onTimeUpdate={() => {
+              // Ensure video keeps playing if it gets stuck
+              const video = videoRef.current;
+              if (video && video.paused && !videoError) {
+                video.play().catch(() => {
+                  // Silent fail - user interaction needed
+                });
+              }
+            }}
+          >
+            {/* Optimized source order - MP4 first as it's more widely supported */}
+            <source src="/0_Abstract_Background_3840x2160.mp4" type="video/mp4" />
+            <source src="/0_Abstract_Background_3840x2160.mov" type="video/quicktime" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
         
-        {/* Enhanced Video Loading Indicator */}
-        {!videoLoaded && !videoError && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="glass-dark rounded-xl p-6 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto mb-3"></div>
-              <div className="text-white text-sm font-medium">Loading video background...</div>
-              <div className="text-white/60 text-xs mt-1">This may take a moment</div>
+      {/* Subtle Video Loading Indicator - Only show briefly when loading video */}
+      {userPreference === 'video' && !videoLoaded && !videoError && (
+        <div className="absolute top-4 right-4 z-10">
+          <div className="glass-dark rounded-lg px-3 py-2 text-center">
+            <div className="flex items-center gap-2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+              <div className="text-white text-xs font-medium">Loading...</div>
             </div>
           </div>
-        )}
-        
-        {/* Video Error State */}
-        {videoError && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <div className="glass-dark rounded-xl p-6 text-center max-w-sm">
-              <div className="text-red-400 text-sm font-medium mb-2">
-                📹 Video unavailable
-              </div>
-              <div className="text-white/80 text-xs mb-3">
-                Using gradient background instead
-              </div>
-              <button 
-                onClick={() => {
-                  setVideoError(false);
-                  setVideoLoaded(false);
-                  // The useEffect will automatically retry
-                }}
-                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-xs text-white transition-colors"
-              >
-                🔄 Retry
-              </button>
-            </div>
-          </div>
-        )}
-        
-        {/* Video Overlay for Content Readability */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-purple-900/40 to-slate-900/60" />
-        <div className="absolute inset-0 bg-black/30" />
-      </div>
+        </div>
+      )}
 
-      {/* Animated Background (Fallback) */}
+      {/* Enhanced Animated Background (Fallback/Default) */}
       <div 
         ref={backgroundRef.ref as any}
         className={cn(
           "absolute inset-0 z-0 transition-opacity duration-1000",
-          videoLoaded && !videoError ? "opacity-10" : "opacity-40"
+          (userPreference === 'static' || (!videoLoaded && videoError) || (userPreference === 'video' && !videoLoaded && !videoError)) 
+            ? "opacity-100" 
+            : "opacity-20"
         )}
         data-testid="hero-background-fallback"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-blue-800/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.2),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.1),transparent_50%)]" />
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 via-purple-600/25 to-blue-800/30" />
+        
+        {/* Animated radial gradients */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.3),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(120,119,198,0.2),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_70%)]" />
+        
+        {/* Subtle texture overlay */}
+        <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDMpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')]" />
+        
+        {/* Video overlay for content readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-purple-900/40 to-slate-900/60" />
+        <div className="absolute inset-0 bg-black/30" />
       </div>
 
       {/* Glass Container */}
