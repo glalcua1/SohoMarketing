@@ -62,7 +62,7 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     id: 'luxury-mountain-resort',
-    quote: "HospitalityReach transformed our social presence completely. We went from struggling to find relevant creators to having a pipeline of perfect matches. The AI matching is incredible - it found creators we never would have discovered manually.",
+    quote: "RateGain Soho transformed our social presence completely. We went from struggling to find relevant creators to having a pipeline of perfect matches. The AI matching is incredible - it found creators we never would have discovered manually.",
     result: '340% ROI',
     metric: 'in first 90 days',
     author: {
@@ -108,7 +108,7 @@ const testimonials: Testimonial[] = [
   },
   {
     id: 'resort-chain',
-    quote: "As a portfolio manager overseeing 12 properties, HospitalityReach was a game-changer. The centralized dashboard and creator intelligence helped us scale creator marketing across all locations with consistent results.",
+    quote: "As a portfolio manager overseeing 12 properties, RateGain Soho was a game-changer. The centralized dashboard and creator intelligence helped us scale creator marketing across all locations with consistent results.",
     result: '500+ Hours',
     metric: 'saved monthly',
     author: {

@@ -366,7 +366,7 @@ const CompetitiveSection: React.FC<CompetitiveSectionProps> = ({ className, onCT
                 <div>
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <CheckCircle className="w-5 h-5 text-emerald-400" />
-                    <h3 className="text-lg font-bold">HospitalityReach</h3>
+                    <h3 className="text-lg font-bold">RateGain Soho</h3>
                   </div>
                   <p className="text-gray-400 text-sm">Hospitality-specialized</p>
                 </div>
