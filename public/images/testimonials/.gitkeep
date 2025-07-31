@@ -1,0 +1,12 @@
+# Testimonial and Case Study Images
+
+Place customer testimonial images and case study screenshots here:
+- Testimonial cards: 600x400px
+- Case study screenshots: Variable dimensions
+- Format: WebP with JPG fallback
+- Naming: testimonial-[client-name].webp or case-study-[project].webp
+
+Examples:
+- testimonial-azure-bay-resort.webp
+- case-study-mountain-lodge-campaign.webp
+- results-dashboard-screenshot.webp 

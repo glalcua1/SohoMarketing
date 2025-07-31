@@ -1,0 +1,12 @@
+# Creator Profile Images
+
+Place creator profile images and content screenshots here:
+- Profile images: 400x400px (square)
+- Content screenshots: Variable dimensions
+- Format: WebP with JPG fallback
+- Naming: creator-[first-name]-[last-name].webp
+
+Examples:
+- creator-emma-chen.webp
+- creator-marcus-rivera.webp
+- creator-sofia-kim-content-sample.webp 

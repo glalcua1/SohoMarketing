@@ -1,0 +1,442 @@
+/**
+ * Global Styles for Hospitality Marketing Platform
+ * 
+ * Features:
+ * - Tailwind CSS imports
+ * - Custom CSS variables for dynamic theming
+ * - Smooth scrolling for parallax effects
+ * - Performance-optimized animations
+ * - Accessibility improvements
+ */
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Import Google Fonts - Modern & Professional */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* CSS Custom Properties for Dynamic Theming */
+:root {
+  /* Primary gradient colors */
+  --gradient-start: 99, 102, 241; /* #6366f1 */
+  --gradient-middle: 59, 130, 246; /* #3b82f6 */
+  --gradient-end: 6, 182, 212; /* #06b6d4 */
+  
+  /* Secondary colors */
+  --accent-coral: 255, 107, 107; /* #ff6b6b */
+  --text-primary: 55, 65, 81; /* #374151 */
+  --text-secondary: 107, 114, 128; /* #6b7280 */
+  
+  /* Spacing and sizing */
+  --container-max-width: 1200px;
+  --section-padding: 5rem;
+  --section-padding-mobile: 3rem;
+  
+  /* Animation timing */
+  --animation-fast: 0.2s;
+  --animation-normal: 0.3s;
+  --animation-slow: 0.6s;
+  
+  /* Z-index layers */
+  --z-background: -1;
+  --z-content: 1;
+  --z-overlay: 10;
+  --z-modal: 100;
+  --z-tooltip: 1000;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Enable smooth scrolling for parallax effects */
+  scroll-behavior: smooth;
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  color: rgb(var(--text-primary));
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  /* Improve font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Better letter spacing for Inter */
+  letter-spacing: -0.011em;
+}
+
+/* Debugging: Visual indicators in development */
+.debug-grid {
+  background-image: 
+    linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Performance: Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom utility classes */
+@layer utilities {
+  /* Gradient text utility */
+  .text-gradient {
+    background: linear-gradient(135deg, rgb(var(--gradient-start)), rgb(var(--gradient-middle)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  /* Hero gradient background */
+  .bg-hero-gradient {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--gradient-start)) 0%,
+      rgb(var(--gradient-middle)) 50%,
+      rgb(var(--gradient-end)) 100%
+    );
+  }
+  
+  /* Animated gradient background */
+  .bg-animated-gradient {
+    background: linear-gradient(
+      -45deg,
+      rgb(var(--gradient-start)),
+      rgb(var(--gradient-middle)),
+      rgb(var(--gradient-end)),
+      rgb(var(--gradient-start))
+    );
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+  
+  /* Container with max width */
+  .container-custom {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Section padding */
+  .section-padding {
+    padding: var(--section-padding-mobile) 0;
+  }
+  
+  @media (min-width: 768px) {
+    .section-padding {
+      padding: var(--section-padding) 0;
+    }
+  }
+  
+  /* Performance: Force hardware acceleration */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+  
+  /* Debugging: Highlight interactive elements */
+  .debug-interactive {
+    outline: 2px dashed rgba(255, 0, 0, 0.5);
+    outline-offset: 2px;
+  }
+}
+
+/* Component-specific styles */
+@layer components {
+  /* Button variants */
+  .btn-primary {
+    @apply bg-gradient-to-r from-accent-500 to-accent-600 text-white font-semibold py-3 px-8 rounded-lg 
+           shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105
+           focus:outline-none focus:ring-4 focus:ring-accent-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-primary-600 font-semibold py-3 px-8 rounded-lg border-2 border-primary-200
+           hover:bg-primary-50 hover:border-primary-300 transition-all duration-300
+           focus:outline-none focus:ring-4 focus:ring-primary-200;
+  }
+  
+  /* Card styles */
+  .card-base {
+    @apply bg-white rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300
+           border border-gray-100 overflow-hidden;
+  }
+  
+  .card-gradient {
+    @apply bg-card-gradient backdrop-blur-sm border border-white/20 rounded-xl;
+  }
+  
+  /* Form styles */
+  .input-base {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 
+           focus:border-primary-500 transition-colors duration-200 bg-white;
+  }
+}
+
+/* GSAP Animation Optimization */
+.gsap-element {
+  will-change: transform, opacity;
+}
+
+
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
+
+/* Modern Glass Effects & Professional Design */
+
+/* Glass morphism effects */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 16px 64px 0 rgba(31, 38, 135, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Professional gradient text */
+.text-gradient-professional {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Ogilvy-inspired professional shadows */
+.shadow-professional {
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-professional-lg {
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-professional-xl {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Modern button effects */
+.btn-professional {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-professional::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-professional:hover::before {
+  left: 100%;
+}
+
+/* Creator image effects */
+.creator-image-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px;
+}
+
+.creator-image-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(45deg, rgba(168, 85, 247, 0.1), rgba(59, 130, 246, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.creator-image-frame:hover::after {
+  opacity: 1;
+}
+
+/* Professional spacing utilities */
+.space-professional > * + * {
+  margin-top: 1.5rem;
+}
+
+.space-professional-lg > * + * {
+  margin-top: 2.5rem;
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(168, 85, 247, 0.2);
+  color: #1f2937;
+}
+
+::-moz-selection {
+  background: rgba(168, 85, 247, 0.2);
+  color: #1f2937;
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Video Background Optimizations */
+video[data-testid="hero-video-background"] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  
+  /* Hardware acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  
+  /* Performance optimizations */
+  will-change: auto;
+}
+
+/* Ensure video doesn't interfere with mobile performance */
+@media (max-width: 768px) {
+  video[data-testid="hero-video-background"] {
+    /* Reduce brightness slightly on mobile for better performance */
+    filter: brightness(0.5) contrast(1.1) saturate(1.0) !important;
+  }
+}
+
+/* Hide video on very slow connections */
+@media (prefers-reduced-data: reduce) {
+  video[data-testid="hero-video-background"] {
+    display: none;
+  }
+}
+
+/* Prefers reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  video[data-testid="hero-video-background"] {
+    animation-play-state: paused !important;
+    transform: none !important;
+  }
+}
+
+/* Creator Carousel Animations */
+@keyframes slideFlow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Ensure smooth animation for creator carousel */
+@media (prefers-reduced-motion: reduce) {
+  .creator-carousel [style*="animation"] {
+    animation-play-state: paused !important;
+    animation-duration: 0s !important;
+  }
+} 

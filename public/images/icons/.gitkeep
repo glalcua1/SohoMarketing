@@ -1,0 +1,12 @@
+# UI Icons and Illustrations
+
+Place UI icons, illustrations, and decorative elements here:
+- Preferred format: SVG for scalability
+- Fallback: PNG with transparency (256x256px)
+- Naming: [icon-purpose].svg
+
+Examples:
+- check-circle.svg
+- hotel-building.svg
+- creator-network.svg
+- success-badge.svg 

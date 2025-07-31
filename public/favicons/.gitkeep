@@ -1,0 +1,12 @@
+# Favicon and App Icons
+
+Place favicon and app icon files here:
+- favicon.ico (32x32px)
+- apple-touch-icon.png (180x180px)
+- icon-192.png (192x192px)
+- icon-512.png (512x512px)
+- manifest.json (PWA manifest)
+
+Generate favicons at:
+- https://favicon.io/
+- https://realfavicongenerator.net/ 

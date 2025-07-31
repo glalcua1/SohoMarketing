@@ -1,0 +1,11 @@
+# Hotel Property Images
+
+Place hotel and resort showcase images here:
+- Recommended size: 1200x800px (3:2 aspect ratio)
+- Format: WebP with JPG fallback
+- Naming: [hotel-name]-[view-type].webp
+
+Examples:
+- azure-bay-resort-exterior.webp
+- mountain-peak-lodge-lobby.webp
+- urban-boutique-pool-area.webp 
