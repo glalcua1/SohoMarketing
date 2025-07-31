@@ -14,6 +14,7 @@ import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/react';
 import { cn } from '@/lib/utils';
+import Footer from '@/components/layout/Footer';
 import '@/styles/globals.css';
 
 /**
@@ -244,6 +245,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <main id="main-content" className="min-h-screen">
             {children}
           </main>
+
+          {/* Professional Footer */}
+          <Footer />
 
 
 

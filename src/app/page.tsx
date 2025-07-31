@@ -28,43 +28,7 @@ import { PricingSection } from '@/components/sections/PricingSection';
 // import { FAQSection } from '@/components/sections/FAQSection';
 // import { FooterSection } from '@/components/sections/FooterSection';
 
-/**
- * Temporary placeholder section component for sections still in development
- * This will be replaced with actual sections as they're implemented
- */
-interface PlaceholderSectionProps {
-  id: string;
-  title: string;
-  description: string;
-  bgColor?: string;
-}
 
-const PlaceholderSection: React.FC<PlaceholderSectionProps> = ({ 
-  id, 
-  title, 
-  description, 
-  bgColor = 'bg-gray-50' 
-}) => (
-  <section 
-    id={id} 
-    className={`section-padding ${bgColor}`}
-    data-testid={`section-${id}`}
-  >
-    <div className="container-custom text-center">
-      <h2 className="text-3xl lg:text-4xl font-display font-bold text-gray-900 mb-6">
-        {title}
-      </h2>
-      <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-        {description}
-      </p>
-      <div className="mt-8 p-8 border-2 border-dashed border-gray-300 rounded-lg">
-        <p className="text-sm text-gray-500">
-          Section under development - {id}
-        </p>
-      </div>
-    </div>
-  </section>
-);
 
 /**
  * Main Homepage Component
@@ -122,27 +86,21 @@ export default function HomePage() {
         <CreatorCarousel />
 
         {/* 4. Solution Demo Section */}
-        <SolutionSection onCTAClick={handleCTAClick} />
+        <SolutionSection />
 
         {/* 5. Process Breakdown Section - Professional Data Nugget */}
-        <ProcessSection onCTAClick={handleCTAClick} />
+        <ProcessSection />
 
         {/* 6. Features Deep Dive Section - Professional Data Nugget */}
-        <FeaturesSection onCTAClick={handleCTAClick} />
+        <FeaturesSection />
 
         {/* 7. Testimonials & Success Stories Section - Professional Data Nugget */}
-        <TestimonialsSection onCTAClick={handleCTAClick} />
+        <TestimonialsSection />
 
         {/* 8. Pricing & Launch Offer Section - Professional Data Nugget */}
         <PricingSection onCTAClick={handlePricingPlanSelect} />
 
-        {/* 9. Footer CTA & Contact Section - Coming Soon */}
-        <PlaceholderSection
-          id="footer"
-          title="Start Your Creator Marketing Journey Tonight"
-          description="Launch your first campaign and transform your hotel's social reach"
-          bgColor="bg-gray-900 text-white"
-        />
+
       </div>
 
 

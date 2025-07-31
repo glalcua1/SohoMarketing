@@ -357,11 +357,10 @@ const SolutionStepCard: React.FC<SolutionStepCardProps> = ({
  * Demonstrates the 3-step solution process with interactive elements
  * 
  * @example
- * <SolutionSection onCTAClick={() => scrollToSection('#pricing')} />
+ * <SolutionSection />
  */
 const SolutionSection: React.FC<SolutionSectionProps> = ({ 
-  className, 
-  onCTAClick 
+  className 
 }) => {
   const [activeStep, setActiveStep] = useState<string>('tell-us-hotel');
   const [isAutoPlay, setIsAutoPlay] = useState(false);

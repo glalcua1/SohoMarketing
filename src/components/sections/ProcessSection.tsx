@@ -135,8 +135,6 @@ const processSteps: ProcessStep[] = [
 interface ProcessSectionProps {
   /** Custom class name */
   className?: string;
-  /** Callback for CTA interactions */
-  onCTAClick?: () => void;
 }
 
 /**
@@ -150,9 +148,9 @@ interface ProcessSectionProps {
  * - Build confidence through detailed features
  * 
  * @example
- * <ProcessSection onCTAClick={() => scrollToSection('#pricing')} />
+ * <ProcessSection />
  */
-const ProcessSection: React.FC<ProcessSectionProps> = ({ className, onCTAClick }) => {
+const ProcessSection: React.FC<ProcessSectionProps> = ({ className }) => {
   const sectionRef = useRef<HTMLElement>(null);
 
   // Section title animation
@@ -304,25 +302,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ className, onCTAClick }
           })}
         </div>
 
-        {/* Bottom CTA Section */}
-        <div className="text-center">
-          <div className="glass-card p-8 rounded-2xl max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Ready to Automate Your Creator Marketing?
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Join 350+ hotels already using our proven process to scale their social reach.
-            </p>
-            <button
-              onClick={onCTAClick}
-              className="btn-professional bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-professional-xl transition-all duration-300 group"
-              data-analytics="process-section-cta"
-            >
-              Start Your Free Trial
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
-          </div>
-        </div>
+
       </div>
 
 
