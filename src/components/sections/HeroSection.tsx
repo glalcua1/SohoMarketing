@@ -144,10 +144,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
                            'ontouchstart' in window;
       setIsMobile(isMobileDevice);
       
-      // On mobile devices, prefer static background to save data and improve performance
+      // Store mobile detection but don't automatically disable video
+      // Let connection speed and user preference determine video usage
       if (isMobileDevice) {
-        setUserPreference('static');
-        console.log('📱 Mobile device detected - using static background for performance');
+        console.log('📱 Mobile device detected - will use smart video loading based on connection');
       }
     };
 
@@ -166,10 +166,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
           setConnectionSpeed(isSlowConnection ? 'slow' : 'fast');
           console.log(`📶 Connection detected: ${connection.effectiveType}, Speed: ${isSlowConnection ? 'slow' : 'fast'}`);
           
-          // Auto-disable video on slow connections for better UX
+          // Auto-disable video on slow connections, especially on mobile
           if (isSlowConnection) {
             setUserPreference('static');
-            console.log('🐌 Slow connection detected - using static background');
+            console.log(`🐌 Slow connection detected (${connection.effectiveType}) - using static background`);
+          } else if (isMobileDevice && (connection.effectiveType === '3g' || connection.downlink < 4)) {
+            // More conservative approach for mobile on 3G or low bandwidth
+            setUserPreference('static');
+            console.log('📱 Mobile with limited bandwidth detected - using static background for better UX');
           }
         } else {
           // Fallback: measure download speed with a small image
@@ -178,9 +182,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
           img.onload = () => {
             const endTime = performance.now();
             const duration = endTime - startTime;
-            const speed = duration < 300 ? 'fast' : 'slow'; // More conservative threshold for video loading
+            // Mobile devices get more conservative thresholds
+            const threshold = isMobileDevice ? 200 : 300;
+            const speed = duration < threshold ? 'fast' : 'slow';
             setConnectionSpeed(speed);
-            console.log(`📶 Connection speed test: ${Math.round(duration)}ms - ${speed}`);
+            console.log(`📶 Connection speed test: ${Math.round(duration)}ms - ${speed} (threshold: ${threshold}ms, mobile: ${isMobileDevice})`);
             
             // Use static background on slow fallback test
             if (speed === 'slow') {
@@ -227,11 +233,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
   // Professional video loading with robust error handling
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || userPreference === 'static') return;
-
-    // Skip video loading on slow connections or mobile unless explicitly requested
-    if ((connectionSpeed === 'slow' || isMobile) && userPreference !== 'video') {
-      console.log('📶 Skipping video load due to slow connection or mobile device');
+    if (!video || userPreference === 'static') {
+      console.log('📶 Skipping video load - user preference set to static background');
       setVideoError(false);
       setVideoLoaded(false);
       return;
@@ -243,7 +246,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
 
     const attemptVideoLoad = async () => {
       try {
-        console.log(`🎬 Video load attempt ${retryCount + 1}/${maxRetries}`);
+        console.log(`🎬 Video load attempt ${retryCount + 1}/${maxRetries} - Mobile: ${isMobile}, Connection: ${connectionSpeed}, Preference: ${userPreference}`);
         
         // Reset video state
         video.currentTime = 0;
@@ -251,9 +254,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
         // Load the video
         video.load();
         
-        // Wait for the video to be ready to play (shorter timeout for better UX)
+        // Wait for the video to be ready to play (adaptive timeout based on connection and device)
         await new Promise((resolve, reject) => {
-          const timeout = connectionSpeed === 'slow' ? 5000 : 8000; // Shorter timeout for slow connections
+          let timeout = 8000; // Default timeout
+          if (connectionSpeed === 'slow') {
+            timeout = 5000; // Shorter for slow connections
+          } else if (isMobile && connectionSpeed === 'fast') {
+            timeout = 10000; // Give mobile devices more time even with fast connections
+          }
+          
           const timeoutId = setTimeout(() => {
             reject(new Error(`Video load timeout after ${timeout/1000} seconds`));
           }, timeout);
