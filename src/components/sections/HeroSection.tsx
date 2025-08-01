@@ -170,7 +170,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
           if (isSlowConnection) {
             setUserPreference('static');
             console.log(`🐌 Slow connection detected (${connection.effectiveType}) - using static background`);
-          } else if (isMobileDevice && (connection.effectiveType === '3g' || connection.downlink < 4)) {
+          } else if (isMobile && (connection.effectiveType === '3g' || connection.downlink < 4)) {
             // More conservative approach for mobile on 3G or low bandwidth
             setUserPreference('static');
             console.log('📱 Mobile with limited bandwidth detected - using static background for better UX');
@@ -183,10 +183,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className, onCTAClick }) => {
             const endTime = performance.now();
             const duration = endTime - startTime;
             // Mobile devices get more conservative thresholds
-            const threshold = isMobileDevice ? 200 : 300;
+            const threshold = isMobile ? 200 : 300;
             const speed = duration < threshold ? 'fast' : 'slow';
             setConnectionSpeed(speed);
-            console.log(`📶 Connection speed test: ${Math.round(duration)}ms - ${speed} (threshold: ${threshold}ms, mobile: ${isMobileDevice})`);
+            console.log(`📶 Connection speed test: ${Math.round(duration)}ms - ${speed} (threshold: ${threshold}ms, mobile: ${isMobile})`);
             
             // Use static background on slow fallback test
             if (speed === 'slow') {
