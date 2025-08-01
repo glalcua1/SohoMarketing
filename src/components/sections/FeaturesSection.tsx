@@ -19,6 +19,8 @@ import {
   FileText, 
   BarChart3, 
   CheckCircle,
+  XCircle,
+  TrendingUp,
   type LucideIcon
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -302,15 +304,18 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({ className }) => {
                   <div className="text-xs text-gray-500 mb-2 uppercase tracking-wide font-semibold">
                     Before vs After
                   </div>
-                  <div className="space-y-2 text-sm">
-                    <div className="text-red-600">
-                      ❌ {feature.beforeAfter.before}
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center gap-2 text-red-600">
+                      <XCircle className="w-4 h-4 flex-shrink-0" />
+                      <span>{feature.beforeAfter.before}</span>
                     </div>
-                    <div className="text-emerald-600">
-                      ✅ {feature.beforeAfter.after}
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                      <span>{feature.beforeAfter.after}</span>
                     </div>
-                    <div className="font-semibold text-gray-900">
-                      📈 {feature.beforeAfter.improvement}
+                    <div className="flex items-center gap-2 font-semibold text-gray-900">
+                      <TrendingUp className="w-4 h-4 flex-shrink-0 text-blue-600" />
+                      <span>{feature.beforeAfter.improvement}</span>
                     </div>
                   </div>
                 </div>
